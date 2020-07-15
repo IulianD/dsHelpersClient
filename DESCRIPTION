@@ -1,7 +1,7 @@
 Package: dsHelpersClient
 Type: Package
 Title: dsSwissKnife helpers for specific projects - client side
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     c(person(given = "Iulian",
              family = "Dragan",
@@ -13,4 +13,5 @@ Description: Specific, project-related functionality that extends dsSwissKnife.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Depends: dsSwissKnifeClient
+Depends: dsSwissKnifeClient (>=0.2.0)
+RoxygenNote: 7.1.1

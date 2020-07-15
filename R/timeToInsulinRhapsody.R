@@ -26,7 +26,6 @@
 #' @param min.days.apart an integer, how many days apart the measurements of HBA1C (second criterion above)
 #' @param criteria a character in c('both', 'first', 'second'). Which of the criteria above should we apply?
 #' @param async same as in datashield.assign
-#' @param wait same as in datashield.assign
 #' @param datasources same as in datashield.assign
 #' @return It doesn't return anything,  it creates a filtered dataframe on the remote node with the columns SUBJID, DAYS_TO_INSULIN, CASE
 #' (the CASE column is always 1 and it serves to further modeling with clogit)
@@ -37,7 +36,7 @@ dssTimeToInsulin <- function(symbol, treatment.df , lab.df , diag.df ,  treatmen
                                 occur.col  =  list(CMOCCUR = list(yes = 'Y', no = 'N')),  diag.occur.col = list(MHOCCUR = list(yes = 'Y', no = 'N')), diag.visit = 'DIAGNOSIS',
                                 diagnosis = list(MHTERM = "TYPE 2 DIABETES"), min.treatment.days = 180,
                                 labtest = list(LBTESTCD = 'HBA1C'), min.measurement = list(LBORRES = 77), measure = list(LBORRESU = "mmol/m"), min.days.apart = 90,
-                                criteria = 'both', async = TRUE, wait = TRUE, datasources = NULL){
+                                criteria = 'both', async = TRUE, datasources = NULL){
   if(is.null(datasources)){
     datasources <- dssSwissKnifeClient::dsBaseClient_findLoginObjects()
   }
@@ -45,11 +44,11 @@ dssTimeToInsulin <- function(symbol, treatment.df , lab.df , diag.df ,  treatmen
 
   actual.args <- as.list(match.call())[-1]
   arglist <- RCurl::merge.list(actual.args,formals())
-  arglist[c('symbol', 'async', 'wait', 'datasources')] <- NULL # we don't need to send these ones
+  arglist[c('symbol', 'async', 'datasources')] <- NULL # we don't need to send these ones
   arglist <- sapply(arglist, eval, USE.NAMES = TRUE, simplify = FALSE)
   arglist <- dssSwissKnifeClient:::.encode.arg(arglist)
   cally <- paste0('timeToInsulin("', arglist, '")')
-  datashield.assign(datasources, symbol = symbol, value = as.symbol(cally), async = async, wait = wait)
+  datashield.assign(datasources, symbol = symbol, value = as.symbol(cally), async = async)
 
 }
 
@@ -71,7 +70,6 @@ dssTimeToInsulin <- function(symbol, treatment.df , lab.df , diag.df ,  treatmen
 #' @param years.after.diagnosis a number what is the cutoff point? (default 5 years)
 #' @param days.offset a number, how far to look around the cutoff point, in days, default one month
 #' @param async same as in datashield.assign
-#' @param wait same as in datashield.assign
 #' @param datasources same as in datashield.assign
 #' @return It doesn't return anything,  it creates a filtered dataframe on the remote node with the columns SUBJID, DIFF_DAYS, CASE
 #' (the CASE column is always 0 and it serves to further modeling with clogit)
@@ -81,7 +79,7 @@ dssTimeToInsulin <- function(symbol, treatment.df , lab.df , diag.df ,  treatmen
 ds2MonotherapyNoInsulin <- function(symbol, treatment.df, diag.df ,  insulin.treatments = list(CMCAT = "INSULINS AND ANALOGUES"), trt.date.col = 'CMDTC', diag.date.col = 'MHDTC',
                                        occur.col  =  list(CMOCCUR = list(yes = 'Y', no = 'N')),  diag.occur.col = list(MHOCCUR = list(yes = 'Y', no = 'N')), diag.visit = 'DIAGNOSIS',
                                        diagnosis = list(MHTERM = "TYPE 2 DIABETES"), years.after.diagnosis = 5, days.offset = 30,
-                                       async = TRUE, wait = TRUE, datasources = NULL){
+                                       async = TRUE,  datasources = NULL){
   if(is.null(datasources)){
     datasources <- dssSwissKnifeClient::dsBaseClient_findLoginObjects()
   }
@@ -89,9 +87,9 @@ ds2MonotherapyNoInsulin <- function(symbol, treatment.df, diag.df ,  insulin.tre
 
   actual.args <- as.list(match.call())[-1]
   arglist <- RCurl::merge.list(actual.args,formals())
-  arglist[c('symbol', 'async', 'wait', 'datasources')] <- NULL # we don't need to send these ones
+  arglist[c('symbol', 'async', 'datasources')] <- NULL # we don't need to send these ones
   arglist <- sapply(arglist, eval, USE.NAMES = TRUE, simplify = FALSE)
   arglist <- dssSwissKnifeClient:::.encode.arg(arglist)
   cally <- paste0('monotherapyNoInsulin("', arglist, '")')
-  opal::datashield.assign(datasources, symbol = symbol, value = as.symbol(cally), async = async, wait = wait)
+  datashield.assign(datasources, symbol = symbol, value = as.symbol(cally), async = async)
 }
