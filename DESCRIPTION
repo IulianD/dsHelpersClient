@@ -13,4 +13,4 @@ Description: Specific, project-related functionality that extends dsSwissKnife.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Depends: dsSwissKnifeClient
+Depends: dsSwissKnifeClient(=0.1.0)
