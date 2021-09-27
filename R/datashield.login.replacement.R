@@ -14,7 +14,7 @@
 datashield.login <- function(...){
   op <- DSI::datashield.login(...)
   sapply(op, function(x){
-    expr <- paste0('c("',x@name,'")')
+    #expr <- paste0('c("',x@name,'")')
     #datashield.assign.expr(x, 'whoami', quote(expr), async = TRUE)
     datashield.aggregate(x, as.symbol(paste0('setDFdefinition(TRUE,"',x@name, '")')), async = TRUE)
   })
